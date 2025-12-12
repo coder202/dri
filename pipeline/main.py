@@ -1,3 +1,9 @@
+import os
+from dotenv import load_dotenv
+
+# Load environment variables from .env file
+load_dotenv()
+
 from sources.steam_tags import run as steam_run
 from sources.google_trends import run as google_run
 from sources.ai_signal_model import run as ai_run

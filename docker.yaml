@@ -1,0 +1,15 @@
+version: "3.8"
+services:
+ postgres:
+   image: postgres:latest
+   container_name: postgres_container
+   environment:
+     POSTGRES_PASSWORD: malena
+     POSTGRES_HOST_AUTH_METHOD: password
+   volumes:
+     - pgdata:/var/lib/postgresql
+     - ./init.sql:/docker-entrypoint-initdb.d/01-init.sql
+   ports:
+     - "5432:5432"
+volumes:
+ pgdata:

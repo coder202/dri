@@ -1,5 +1,10 @@
 from datetime import datetime
-from utils.db import insert_signal
+
+try:
+    from utils.db import insert_signal
+except Exception:
+    def insert_signal(*args, **kwargs):
+        pass
 
 def run():
     tags = {
