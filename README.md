@@ -1,7 +1,7 @@
 # dri - Shadow Demand & Microtrend Scanner
 Dark Research Index
 
-What it is
+**What it is**
 
 A fully automated micro-SaaS that scrapes and clusters:
 
@@ -13,11 +13,11 @@ app niches with exponential installs
 
 emerging micro-genres in gaming, media, API markets
 
-Use Case
+**Use Case**
 
 Small studios, solo devs, writers, and micro SaaS builders need early signals before niches explode.
 
-Deliverables
+**Deliverables**
 
 Weekly automated PDF with:
 
@@ -29,7 +29,7 @@ user sentiment shifts
 
 “silent breakout” products/genres
 
-Distribution
+**Distribution**
 
 Gumroad subscription
 
@@ -37,7 +37,7 @@ Self-serve login page
 
 No support policy declared upfront
 
-Pricing
+**Pricing**
 
 Subscription: $12–$18/month
 
@@ -45,7 +45,7 @@ Annual: $120
 
 Enterprise silent license: $399
 
-Reason this fits perfectly
+**Reason this fits perfectly**
 
 It’s intelligence, not content.
 
