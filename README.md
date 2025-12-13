@@ -1,5 +1,6 @@
 # dri - Shadow Demand & Microtrend Scanner
 Dark Research Index
+
 What it is
 
 A fully automated micro-SaaS that scrapes and clusters:
