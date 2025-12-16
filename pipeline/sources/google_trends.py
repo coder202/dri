@@ -1,25 +1,126 @@
-import json
-import requests
-from datetime import datetime
+import logging
+from datetime import datetime, timedelta
+from pytrends.request import TrendReq
 from utils.db import insert_signal
 
+# Set up logging
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+)
+logger = logging.getLogger(__name__)
+
+def get_trending_searches(pytrends):
+    """Fetch daily trending searches using pytrends"""
+    try:
+        # Get Google Hot Trends data
+        trending_searches = pytrends.trending_searches(pn='united_states')
+        if trending_searches is None or trending_searches.empty:
+            logger.warning("No trending searches data returned from Google Trends")
+            return []
+            
+        # Convert to list of search terms
+        return trending_searches[0].tolist()
+    except Exception as e:
+        logger.error(f"Error fetching trending searches: {e}", exc_info=True)
+        return []
+
+def get_interest_over_time(pytrends, keyword, timeframe='now 7-d'):
+    """Get interest over time for a specific keyword"""
+    try:
+        pytrends.build_payload(kw_list=[keyword], timeframe=timeframe)
+        df = pytrends.interest_over_time()
+        
+        if df.empty:
+            return 0
+            
+        # Calculate average interest over the period
+        return df[keyword].mean()
+    except Exception as e:
+        logger.error(f"Error getting interest over time for '{keyword}': {e}")
+        return 0
+
+def get_related_queries_count(pytrends, keyword):
+    """Get count of related queries for a keyword"""
+    try:
+        pytrends.build_payload(kw_list=[keyword])
+        related_queries = pytrends.related_queries()
+        
+        if not related_queries or keyword not in related_queries:
+            return 0
+            
+        top_queries = related_queries[keyword]['top']
+        rising_queries = related_queries[keyword]['rising']
+        
+        # Count unique related queries
+        related_count = 0
+        if top_queries is not None:
+            related_count += len(top_queries)
+        if rising_queries is not None:
+            related_count += len(rising_queries)
+            
+        return related_count
+    except Exception as e:
+        logger.error(f"Error getting related queries for '{keyword}': {e}")
+        return 0
+
 def run():
-    url = "https://trends.google.com/trends/api/dailytrends?hl=en-US&geo=US"
-    raw = requests.get(url).text.lstrip(")]}',")
-    data = json.loads(raw)["default"]["trendingSearchesDays"][0]["trendingSearches"]
-
-    for item in data:
-        tag = item["title"]["query"]
-        delta = len(item.get("relatedQueries", [])) / 100
-        velocity = item.get("traffic", 0) / 10000
-        csi = (velocity * 0.7) + (delta * 0.3)
-
-        insert_signal(
-            datetime.utcnow(),
-            "google_trends",
-            tag,
-            velocity,
-            delta,
-            csi,
-            "consumer"
+    try:
+        logger.info("Initializing Google Trends client...")
+        # Initialize pytrends with proper parameters
+        pytrends = TrendReq(
+            hl='en-US',
+            tz=360,  # UTC offset in minutes
+            timeout=(10, 25),  # (connect, read) timeouts in seconds
+            retries=2,
+            backoff_factor=0.1,
+            requests_args={'verify': False}  # Disable SSL verification if needed
         )
+        
+        logger.info("Fetching trending searches...")
+        keywords = get_trending_searches(pytrends)
+        
+        if not keywords:
+            logger.warning("No trending searches found")
+            return
+            
+        logger.info(f"Found {len(keywords)} trending searches")
+        
+        for keyword in keywords:
+            try:
+                # Get interest over time (velocity)
+                velocity = get_interest_over_time(pytrends, keyword)
+                
+                # Get related queries count (delta)
+                related_count = get_related_queries_count(pytrends, keyword)
+                delta = related_count / 10.0  # Normalize to a 0-10 scale
+                
+                # Calculate CSI (Consumer Sentiment Index)
+                csi = (velocity * 0.7) + (delta * 0.3)
+                
+                # Log the data we're about to insert
+                logger.info(f"Processing: {keyword} | Velocity: {velocity:.2f} | Related: {related_count} | CSI: {csi:.2f}")
+                
+                # Insert into database
+                insert_signal(
+                    datetime.utcnow(),
+                    "google_trends",
+                    keyword,
+                    velocity,
+                    delta,
+                    csi,
+                    "consumer"
+                )
+                
+                # Be nice to Google's servers
+                import time
+                time.sleep(1)
+                
+            except Exception as e:
+                logger.error(f"Error processing keyword '{keyword}': {e}", exc_info=True)
+                continue
+                
+    except Exception as e:
+        logger.error(f"Unexpected error in Google Trends pipeline: {e}", exc_info=True)
+    finally:
+        logger.info("Google Trends pipeline completed")
