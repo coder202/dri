@@ -5,7 +5,6 @@ from dotenv import load_dotenv
 load_dotenv()
 
 from sources.steam_tags import run as steam_run
-from sources.google_trends import run as google_run
 from sources.ai_signal_model import run as ai_run
 from sources.reddit_velocity import run as reddit_run
 from sources.github_activity import run as github_run
@@ -18,12 +17,6 @@ if __name__ == "__main__":
         print("Steam data ingested.")
     except Exception as e:
         print("Steam ingestion error:", e)
-
-    try:
-        google_run()
-        print("Google Trends ingested.")
-    except Exception as e:
-        print("Google ingestion error:", e)
 
     try:
         ai_run()

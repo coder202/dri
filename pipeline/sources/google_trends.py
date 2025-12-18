@@ -1,7 +1,7 @@
 import logging
 from datetime import datetime, timedelta
 from pytrends.request import TrendReq
-from utils.db import insert_signal
+from pipeline.utils.db import insert_signal
 
 # Set up logging
 logging.basicConfig(
@@ -93,8 +93,8 @@ def run():
             hl='en-US',
             tz=360,  # UTC offset in minutes
             timeout=(10, 25),  # (connect, read) timeouts in seconds
-            retries=2,
-            backoff_factor=0.1
+            retries=1,  # Reduced retries to avoid rate limiting
+            backoff_factor=0.5  # Increased backoff
         )
         
         logger.info("Fetching trending searches...")
@@ -132,9 +132,9 @@ def run():
                     "consumer"
                 )
                 
-                # Be nice to Google's servers
+                # Be nice to Google's servers - increased delay
                 import time
-                time.sleep(1)
+                time.sleep(7)
                 
             except Exception as e:
                 logger.error(f"Error processing keyword '{keyword}': {e}", exc_info=True)
