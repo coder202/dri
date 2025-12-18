@@ -2,3 +2,4 @@ psycopg[binary]
 requests
 python-dotenv
 pytrends
+feedparser

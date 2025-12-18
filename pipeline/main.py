@@ -8,6 +8,10 @@ from sources.steam_tags import run as steam_run
 from sources.ai_signal_model import run as ai_run
 from sources.reddit_velocity import run as reddit_run
 from sources.github_activity import run as github_run
+from sources.itchio_new_releases import run as itchio_run
+from sources.steam_tag_growth import run as steam_tag_run
+from sources.wikipedia_pageviews import run as wiki_run
+from sources.steam_emerging import run as steam_emerging_run
 
 if __name__ == "__main__":
     print("Starting ingestion pipeline...")
@@ -17,6 +21,18 @@ if __name__ == "__main__":
         print("Steam data ingested.")
     except Exception as e:
         print("Steam ingestion error:", e)
+
+    try:
+        steam_emerging_run()
+        print("Steam emerging categories ingested.")
+    except Exception as e:
+        print("Steam emerging ingestion error:", e)
+
+    try:
+        steam_tag_run()
+        print("Steam tag growth ingested.")
+    except Exception as e:
+        print("Steam tag growth ingestion error:", e)
 
     try:
         ai_run()
@@ -35,5 +51,17 @@ if __name__ == "__main__":
         print("GitHub activity ingested.")
     except Exception as e:
         print("GitHub ingestion error:", e)
+
+    try:
+        itchio_run()
+        print("itch.io new releases ingested.")
+    except Exception as e:
+        print("itch.io ingestion error:", e)
+
+    try:
+        wiki_run()
+        print("Wikipedia pageviews ingested.")
+    except Exception as e:
+        print("Wikipedia pageviews ingestion error:", e)
 
     print("Pipeline complete.")
