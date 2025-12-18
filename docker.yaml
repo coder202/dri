@@ -4,7 +4,7 @@ services:
    image: postgres:latest
    container_name: postgres_container
    environment:
-     POSTGRES_PASSWORD: malena
+     POSTGRES_PASSWORD: bisquit
      POSTGRES_HOST_AUTH_METHOD: password
    volumes:
      - pgdata:/var/lib/postgresql
