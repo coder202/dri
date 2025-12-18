@@ -1,5 +1,5 @@
 # dri - Shadow Demand & Microtrend Scanner
-Dark Research Index
+**Dark Research Index**
 
 **What it is**
 
@@ -52,3 +52,5 @@ It’s intelligence, not content.
 Automation does 90% of ongoing work.
 
 No communication and no active presence required.
+
+**THIS SOFTWARE IS PROVIDED AS IS. THERE IS ABSOLUTELY NO WARRANTY WHATSOEVER. Distributed under BSD 3-Clause License.**
