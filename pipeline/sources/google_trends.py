@@ -13,17 +13,38 @@ logger = logging.getLogger(__name__)
 def get_trending_searches(pytrends):
     """Fetch daily trending searches using pytrends"""
     try:
-        # Get Google Hot Trends data
+        # Try different approaches for trending searches
+        # Method 1: trending_searches (may be deprecated)
         trending_searches = pytrends.trending_searches(pn='united_states')
-        if trending_searches is None or trending_searches.empty:
-            logger.warning("No trending searches data returned from Google Trends")
-            return []
-            
-        # Convert to list of search terms
-        return trending_searches[0].tolist()
+        if trending_searches is not None and not trending_searches.empty:
+            logger.info("Using trending_searches method")
+            return trending_searches[0].tolist()
+        
+        # Method 2: Use today_searches as fallback
+        logger.info("trending_searches failed, trying today_searches")
+        today_searches = pytrends.today_searches(pn='united_states')
+        if today_searches is not None and not today_searches.empty:
+            return today_searches[0].tolist()
+        
+        # Method 3: Use hardcoded trending topics as fallback
+        logger.warning("Both API methods failed, using fallback keywords")
+        fallback_keywords = [
+            "artificial intelligence", "machine learning", "climate change", 
+            "cryptocurrency", "electric vehicles", "remote work",
+            "inflation", "supply chain", "cybersecurity", "renewable energy"
+        ]
+        return fallback_keywords
+        
     except Exception as e:
         logger.error(f"Error fetching trending searches: {e}", exc_info=True)
-        return []
+        # Return fallback keywords
+        logger.warning("Using fallback keywords due to API failure")
+        fallback_keywords = [
+            "artificial intelligence", "machine learning", "climate change", 
+            "cryptocurrency", "electric vehicles", "remote work",
+            "inflation", "supply chain", "cybersecurity", "renewable energy"
+        ]
+        return fallback_keywords
 
 def get_interest_over_time(pytrends, keyword, timeframe='now 7-d'):
     """Get interest over time for a specific keyword"""
@@ -73,8 +94,7 @@ def run():
             tz=360,  # UTC offset in minutes
             timeout=(10, 25),  # (connect, read) timeouts in seconds
             retries=2,
-            backoff_factor=0.1,
-            requests_args={'verify': False}  # Disable SSL verification if needed
+            backoff_factor=0.1
         )
         
         logger.info("Fetching trending searches...")
