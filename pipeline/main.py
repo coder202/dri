@@ -12,6 +12,7 @@ from sources.itchio_new_releases import run as itchio_run
 from sources.steam_tag_growth import run as steam_tag_run
 from sources.wikipedia_pageviews import run as wiki_run
 from sources.steam_emerging import run as steam_emerging_run
+from utils.views import run_views
 
 if __name__ == "__main__":
     print("Starting ingestion pipeline...")
@@ -63,5 +64,11 @@ if __name__ == "__main__":
         print("Wikipedia pageviews ingested.")
     except Exception as e:
         print("Wikipedia pageviews ingestion error:", e)
+
+    try:
+        run_views()
+        print("Database views updated.")
+    except Exception as e:
+        print("Views execution error:", e)
 
     print("Pipeline complete.")
