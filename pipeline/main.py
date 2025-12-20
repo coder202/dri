@@ -4,6 +4,7 @@ from dotenv import load_dotenv
 # Load environment variables from .env file
 load_dotenv()
 
+from sources.steam_spy import run as steam_spy_run
 from sources.steam_tags import run as steam_run
 from sources.ai_signal_model import run as ai_run
 from sources.reddit_velocity import run as reddit_run
@@ -17,6 +18,12 @@ from utils.views import run_views
 if __name__ == "__main__":
     print("Starting ingestion pipeline...")
     
+    try:
+        steam_spy_run()
+        print("Steam Spy data ingested.")
+    except Exception as e:
+        print("Steam Spy ingestion error:", e)
+
     try:
         steam_run()
         print("Steam data ingested.")

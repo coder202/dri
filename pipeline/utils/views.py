@@ -7,12 +7,14 @@ load_dotenv()
 
 def execute_view(view_path):
     """Execute a SQL view file against the database"""
+    conn = None
+    cursor = None
     try:
         # Database connection parameters
         db_params = {
             'host': os.getenv('PG_HOST', 'localhost'),
             'port': os.getenv('PG_PORT', '5432'),
-            'database': os.getenv('PG_DB', 'signals_db'),
+            'dbname': os.getenv('PG_DB', 'signals_db'),
             'user': os.getenv('PG_USER', 'postgres'),
             'password': os.getenv('PG_PASS', 'bisquit')
         }
