@@ -2,40 +2,44 @@ import requests
 from datetime import datetime
 from utils.db import insert_signal
 
-STEAM_SEARCH_URL = "https://store.steampowered.com/api/storesearch/"
+STEAMSPY_TAGS_URL = "https://steamspy.com/api.php?request=tagstats"
 
-TAGS = [
-    "Strategy",
-    "Simulation",
-    "Roguelike",
-    "Deckbuilder",
-    "Automation"
-]
+MIN_GAMES_THRESHOLD = 50
+
+
+def fetch_tag_stats():
+    resp = requests.get(STEAMSPY_TAGS_URL, timeout=15)
+    resp.raise_for_status()
+    return resp.json()
+
 
 def run():
-    for tag in TAGS:
-        params = {
-            "term": tag,
-            "l": "english",
-            "cc": "US"
-        }
+    try:
+        tag_data = fetch_tag_stats()
+    except Exception:
+        return
 
-        resp = requests.get(STEAM_SEARCH_URL, params=params, timeout=10)
-        data = resp.json()
+    for raw_tag, stats in tag_data.items():
+        try:
+            total_games = int(stats.get("games", 0))
+            delta_24h = int(stats.get("delta", 0))
+        except Exception:
+            continue
 
-        total = data.get("total", 0)
-        items = data.get("items", [])
+        if total_games < MIN_GAMES_THRESHOLD:
+            continue
 
-        velocity = min(total / 10_000, 1)
-        delta = min(len(items) / 50, 1)
+        # --- Deterministic growth math ---
+        velocity = min(delta_24h / 100, 1)
+        delta = min(delta_24h / max(total_games, 1), 1)
         csi = min((velocity * 0.6 + delta * 0.4), 1)
 
         insert_signal(
             event_ts=datetime.utcnow(),
             source="steam_tag_growth",
-            tag=tag.lower(),
-            velocity=round(velocity, 6),
-            delta=round(delta, 6),
-            csi=round(csi, 6),
-            category="store-demand"
+            tag=raw_tag.lower(),
+            velocity=round(max(velocity, 0), 6),
+            delta=round(max(delta, 0), 6),
+            csi=round(max(csi, 0), 6),
+            category="supply-pressure"
         )

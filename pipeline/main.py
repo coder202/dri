@@ -6,8 +6,9 @@ load_dotenv()
 
 from sources.steam_spy import run as steam_spy_run
 from sources.steam_tags import run as steam_run
-from sources.ai_signal_model import run as ai_run
+from sources.ai_signals import run as ai_signals_run
 from sources.reddit_velocity import run as reddit_run
+from sources.reddit_trends import run as reddit_trends_run
 from sources.github_activity import run as github_run
 from sources.itchio_new_releases import run as itchio_run
 from sources.steam_tag_growth import run as steam_tag_run
@@ -43,16 +44,22 @@ if __name__ == "__main__":
         print("Steam tag growth ingestion error:", e)
 
     try:
-        ai_run()
-        print("AI model ingested.")
+        ai_signals_run()
+        print("AI signals ingested.")
     except Exception as e:
-        print("AI ingestion error:", e)
+        print("AI signals ingestion error:", e)
 
     try:
         reddit_run()
         print("Reddit velocity ingested.")
     except Exception as e:
         print("Reddit ingestion error:", e)
+
+    try:
+        reddit_trends_run()
+        print("Reddit trends ingested.")
+    except Exception as e:
+        print("Reddit trends ingestion error:", e)
         
     try:
         github_run()
