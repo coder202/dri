@@ -1,5 +1,5 @@
 # dri - Shadow Demand & Microtrend Scanner
-**Dark Research Index**
+**Dark Research Index - Prototype**
 
 **What it is**
 
@@ -12,6 +12,8 @@ keywords with sudden demand spikes
 app niches with exponential installs
 
 emerging micro-genres in gaming, media, API markets
+
+_Note: Social score is not implemented, due to lack of free public social APIs._
 
 **Use Case**
 
