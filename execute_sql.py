@@ -18,5 +18,5 @@ def execute_sql_file(file_path):
     print(f"Successfully executed SQL from {file_path}")
 
 if __name__ == "__main__":
-    sql_file = "views/market_divergence_view_v2.sql"
+    sql_file = "views/views/market_divergence_view.sql"
     execute_sql_file(sql_file)

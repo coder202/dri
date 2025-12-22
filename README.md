@@ -17,40 +17,55 @@ emerging micro-genres in gaming, media, API markets
 
 Small studios, solo devs, writers, and micro SaaS builders need early signals before niches explode.
 
-**Deliverables**
+# Market Intelligence Pipeline
 
-Weekly automated PDF with:
+A deterministic market signal engine that identifies emerging opportunities and market saturation patterns by analyzing public data sources across gaming, technology, and digital markets.
 
-20–30 rising micro-niches
+## What This Pipeline Does
 
-search volume spikes
+This system automatically collects, processes, and analyzes market signals from multiple free public sources to identify:
 
-user sentiment shifts
+- **Under-supplied niches** (high demand, low supply - build opportunities)
+- **Over-crowded markets** (high supply, low demand - avoid or differentiate)
+- **Balanced markets** (stable conditions)
+- **Market divergence trends** (weekly snapshots for analysis)
 
-“silent breakout” products/genres
+## Data Sources
 
-**Distribution**
+### Free Public APIs & Sources
+- **Steam/SteamSpy**: Game market supply and tag growth
+- **Reddit**: Community attention and discussion velocity  
+- **Wikipedia**: Knowledge-seeking and intent signals
+- **AI Research Feeds**: Capability diffusion (GitHub, arXiv, HN)
+- **itch.io**: Indie experimentation velocity
+- **Additional sources**: Easy to extend with new signal collectors
 
-Gumroad subscription
+## Key Components
 
-Self-serve login page
+### Signal Collection Pipeline
+Python-based ingestion system that:
+- Collects data from 6+ free sources
+- Normalizes tags across platforms
+- Computes deterministic CSI (Composite Signal Index)
+- Stores atomic signals in PostgreSQL
 
-No support policy declared upfront
+### Analytics Engine
+PostgreSQL-based analysis with:
+- **Tag normalization layer** for cross-source correlation
+- **Market divergence views** comparing demand vs supply
+- **Weekly snapshot system** for historical analysis
+- **Confidence scoring** based on signal volume
 
-**Pricing**
+### Core Metrics
+- **Demand CSI**: Weighted blend of social attention + intent + capability signals
+- **Supply CSI**: Market supply pressure from Steam/itch.io
+- **Divergence**: Demand CSI - Supply CSI (positive = opportunity, negative = saturation)
+- **Confidence Level**: Based on number of confirming signals
 
-Subscription: $12–$18/month
+## Technical Architecture
 
-Annual: $120
-
-Enterprise silent license: $399
-
-**Reason this fits perfectly**
-
-It’s intelligence, not content.
-
-Automation does 90% of ongoing work.
-
-No communication and no active presence required.
-
-**THIS SOFTWARE IS PROVIDED AS IS. THERE IS ABSOLUTELY NO WARRANTY WHATSOEVER. Distributed under BSD 3-Clause License.**
+### Database Schema
+```sql
+signals: event_ts, signal_source, tag, velocity, delta, csi, category
+tag_alias: source_tag, canonical_tag  
+weekly_market_snapshot: snapshot_week, tag, demand_csi, supply_csi, divergence, market_state
