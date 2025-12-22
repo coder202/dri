@@ -4,6 +4,8 @@ A data ingestion pipeline that collects signals from Steam, Google Trends, and a
 
 ## Quick Start
 
+_Note: It is best to use some AI Coding Editor like Microsoft Visual Studio Code, Windsurf, etc. and make it to recreate the environment for you._
+
 ### Option 1: Run locally with Docker networking (recommended)
 
 ```bash
