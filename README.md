@@ -1,24 +1,6 @@
 # dri - Shadow Demand & Microtrend Scanner
 **Dark Research Index - Prototype**
 
-**What it is**
-
-A fully automated micro-SaaS that scrapes and clusters:
-
-product categories rising quietly (not mainstream yet)
-
-keywords with sudden demand spikes
-
-app niches with exponential installs
-
-emerging micro-genres in gaming, media, API markets
-
-_Note: Social score is not implemented, due to lack of free public social APIs._
-
-**Use Case**
-
-Small studios, solo devs, writers, and micro SaaS builders need early signals before niches explode.
-
 # Market Intelligence Pipeline
 
 A deterministic market signal engine that identifies emerging opportunities and market saturation patterns by analyzing public data sources across gaming, technology, and digital markets.
@@ -71,6 +53,6 @@ PostgreSQL-based analysis with:
 signals: event_ts, signal_source, tag, velocity, delta, csi, category
 tag_alias: source_tag, canonical_tag  
 weekly_market_snapshot: snapshot_week, tag, demand_csi, supply_csi, divergence, market_state
-```
+
 
 THIS SOFTWARE IS PROVIDED AS IS, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE. THERE IS NO SUPPORT WHATSOEVER.
