@@ -16,7 +16,7 @@ def execute_view(view_path):
             'port': os.getenv('PG_PORT', '5432'),
             'dbname': os.getenv('PG_DB', 'signals_db'),
             'user': os.getenv('PG_USER', 'postgres'),
-            'password': os.getenv('PG_PASS', 'bisquit')
+            'password': os.getenv('PG_PASS', 'biscuit')
         }
         
         # Read the SQL file

@@ -1,5 +1,5 @@
 -- Initialization script to create dridb and driuser
-ALTER USER postgres WITH PASSWORD 'bisquit';
+ALTER USER postgres WITH PASSWORD 'biscuit';
 
 CREATE USER driuser WITH PASSWORD 'dripass';
 

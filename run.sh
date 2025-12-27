@@ -22,7 +22,7 @@ sleep 5
 echo "Running pipeline..."
 export PG_HOST=localhost
 export PG_USER=postgres
-export PG_PASS=bisquit
+export PG_PASS=biscuit
 export PG_DB=signals_db
 export PG_PORT=5432
 export PYTHONPATH=/home/mod/github/dri
